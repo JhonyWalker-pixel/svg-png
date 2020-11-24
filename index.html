@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="icon" href="./images/icon.png"/>
+    <meta name="description" content="Conheça seu novo site indíspensavel para converter suas frases e palavras para caixa alta, baixa e com outras funções incríveis">
+    <link rel="stylesheet" href="style.css"></link>
+    <title>SVG to PNG</title>
+</head>
+    <body>
+        <div>
+          <div class="logo"><img src="./images/svg-to-png.png" alt=""></div>
+          <textarea id="textarea" placeholder="Insert the SVG tag and it's content here" style="resize:none"></textarea><br/><br/>
+          <button id="loadsvg">Load SVG</button><br/><br/>
+          <div id="divload"></div><br/>
+          <div id="size">
+            Width: <input id="width" type="number" max="9999"></input>
+            Height: <input id="height" type="number" max="9999"></input><br/>
+          </div>
+            <button id="save">Save SVG as PNG</button><br/><br/>
+            <canvas id="canvas"></canvas>
+            <footer class="credits">Developer &copy;Jhony Walker 2020</footer>
+        </div>
+        <div class="space"></div>
+        <script>
+        let text = document.getElementById('textarea');
+        text.wrap = 'off';
+        let svg = null;
+        let width = document.getElementById('width');
+        let height = document.getElementById('height'); 
+        document.getElementById('loadsvg').addEventListener('click', function () {
+          let div = document.getElementById('divload');
+          div.innerHTML= text.value;
+          svg = div.querySelector('svg');
+          width.value = svg.getBoundingClientRect().width;
+          height.value = svg.getBoundingClientRect().height;
+        });
+
+        document.getElementById('save').addEventListener('click', function () {
+          let canvas = document.getElementById('canvas');
+          svg.setAttribute('width', width.value);
+          svg.setAttribute('height', height.value);
+          canvas.width = width.value;
+          canvas.height = height.value;
+          let data = new XMLSerializer().serializeToString(svg);
+          let win = window.URL || window.webkitURL || window;
+          let img = new Image();
+          let blob = new Blob([data], { type: 'image/svg+xml' });
+          let url = win.createObjectURL(blob);
+          img.onload = function () {
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            win.revokeObjectURL(url);
+            let uri = canvas.toDataURL('image/png').replace('image/png', 'octet/stream');
+            let a = document.createElement('a');
+            document.body.appendChild(a);
+            a.style = 'display: none';
+            a.href = uri
+            a.download = (svg.id || svg.svg.getAttribute('name') || svg.getAttribute('aria-label') || 'untitled') + '.png';
+            a.click();
+            window.URL.revokeObjectURL(uri);
+            document.body.removeChild(a);
+          };
+          img.src = url;
+        });
+        </script>
+</body>
+</html>
