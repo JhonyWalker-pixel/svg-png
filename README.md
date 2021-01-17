@@ -7,7 +7,7 @@
 
 This is a web application that converts svg codes to png image, where you have the possibility to download (with high quality) selecting the height and width you want or the one already set by default. Come on see the [final result](https://jhonywalker-pixel.github.io/svg-png/)
 
-## :computer: Languages used
+## :computer: Used languages
 
 This project used:
 
